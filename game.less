@@ -1,0 +1,185 @@
+/*** SETTINGS ***/
+@ratio: 1;
+@speed: 12s;
+@tireSize: (12px * @ratio);
+@screenW: (320px * @ratio);
+@screenH: (240px * @ratio);
+@nbTiles: 24;
+@tile: (12px * @ratio);
+@import url(http://fonts.googleapis.com/css?family=Press+Start+2P);
+
+/*** ANIMATIONS ***/
+@keyframes race {
+  from {
+    top: 0;
+  }
+  
+  to {
+    top: -100%;
+  }
+}
+
+/*** ELEMENTS ***/
+body {
+  font-size: 12px * @ratio;
+  font-family: 'Press Start 2P', cursive;
+}
+
+#screen,
+#gameover,
+#finish {
+  background: black;
+  width: @screenW;
+  height: @screenH;
+}
+
+#screen {
+  margin: 50px auto;
+  position: relative;
+  background: black;  
+  overflow: hidden;  
+  transform: rotate(180deg) scaleX(-1);
+}
+
+#race {
+  position: relative;
+  width: @screenW;
+  height: (@tile * 220);
+  cursor: url('http://cjouineau.free.fr/f1circus.gif'), auto;
+  
+  #finish {
+    line-height: @screenH;
+    position: absolute;
+    top: 0;
+    left: 0;
+    text-align: center;
+    text-transform: uppercase;
+    color: white;
+    transform: rotate(-180deg) scaleX(-1);
+  }
+}
+
+.road {
+  position: relative;
+  width: 100%;
+  height: @tile;
+  background: gray;
+//  animation: race @speed ease-in forwards;
+  
+  .pavement {
+    position: relative;
+    width: (2 * @tile); // equals .offset2
+    margin: -4px 0 0;
+    border: (4px * @ratio) solid white;
+    border-top: 0;
+    background: green;
+    z-index: 1;
+      
+    &:hover {
+      cursor: url('http://cjouineau.free.fr/f1boom.gif'), auto;
+    }
+    
+    // tire
+    &:before {
+      content: '';
+      position: relative;
+      top: 0;
+      width: @tile;
+      height: @tile;
+      background: black;
+      border-radius: 50%;
+    }
+  
+    // hubcap
+    &:after {
+      content: '';
+      position: relative;
+      top: (@tile / 3);
+      left: (@tile / 3);
+      display: block;
+      width: (@tile / 3);
+      height: (@tile / 3);
+      background: white;
+      border-radius: 50%;
+    }
+    
+    &.left {
+      float: left;
+      border-left: 0;
+      border-top-right-radius: 4px;
+      border-bottom-right-radius: 4px;
+
+      &:before {
+        float: right;
+        right: (4px * @ratio);
+      }
+      
+      &:after {
+        float: right;
+        right: (@tireSize / 3);
+      }
+    }
+    
+    &.right {
+      float: right;
+      border-right: 0;
+      border-top-left-radius: 4px;
+      border-bottom-left-radius: 4px;
+      
+      &:before {
+        float: left;
+        left: (4px * @ratio);
+      }
+      
+      &:after {
+        float: left;
+        left: -(@tireSize / 3);
+      }
+    }
+  }
+  
+  // http://blog.thehippo.de/2012/04/programming/do-a-loop-with-less-css/
+  .offset (@index) when (@index > 0) {
+    // this string interpolation syntax is to be deprecated soon
+    (~".offset@{index}") {
+      width: (@tile * @index);
+      &.left {
+        margin-left: -6px *2 * @ratio;
+      }
+      &.right {
+        margin-left: -6px *2 * @ratio;
+      }
+    }
+    .offset(@index - 1);
+  }
+  .offset (0) {}
+  
+  .offset (@nbTiles);
+  
+  // exceptions, need no :before / : after
+  .offset0 {
+    width: 0;
+    border: 0;
+    &:before,
+      &:after {
+        width: 0;
+    }
+  }
+  .offset1 {
+    &:before,
+      &:after {
+        width: 0;
+    }
+  }
+}
+
+#gameover {
+  display: none;
+  
+  background: gray;
+  line-height: (240px * @ratio);
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: bold;
+  cursor: default;
+}
