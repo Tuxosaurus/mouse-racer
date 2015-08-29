@@ -1,6 +1,6 @@
 /*** SETTINGS ***/
 @ratio: 1;
-@speed: 12s;
+@speed: 10s; 
 @tireSize: (12px * @ratio);
 @screenW: (320px * @ratio);
 @screenH: (240px * @ratio);
@@ -64,7 +64,7 @@ body {
   width: 100%;
   height: @tile;
   background: gray;
-//  animation: race @speed ease-in forwards;
+  animation: race @speed ease-in forwards;
   
   .pavement {
     position: relative;
@@ -139,9 +139,9 @@ body {
   }
   
   // http://blog.thehippo.de/2012/04/programming/do-a-loop-with-less-css/
+  // might need to update with http://lesscss.org/features/#loops-feature
   .offset (@index) when (@index > 0) {
-    // this string interpolation syntax is to be deprecated soon
-    (~".offset@{index}") {
+    .offset@{index} {
       width: (@tile * @index);
       &.left {
         margin-left: -6px *2 * @ratio;
